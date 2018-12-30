@@ -22,8 +22,21 @@ const movies = [
   }
 ]
 
+//Render : componentWillMount() -> render() -> componentDidMount()
+//Update : componentReceiveProps() -> shouldComponentUpdate() -> componentWillUpdate() -> render() -> componentDidMount()
+
 class App extends Component {
+
+  componentWillMount(){
+    console.log("Will mount")
+  }
+
+  componentDidMount(){
+    console.log("Did mount")
+  }
+
   render() {
+    console.log("Did render")
     return (
       <div className="App">
         {/*map은 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환*/}
