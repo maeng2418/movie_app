@@ -26,6 +26,10 @@ const movies = [
 //Update : componentReceiveProps() -> shouldComponentUpdate() -> componentWillUpdate() -> render() -> componentDidMount()
 
 class App extends Component {
+  //state를 변경하면, render가 새로운 state와 함께 다시 작동한다.
+  state = {
+    greeting : "Hello"
+  }
 
   componentWillMount(){
     console.log("Will mount")
@@ -33,12 +37,18 @@ class App extends Component {
 
   componentDidMount(){
     console.log("Did mount")
+    setTimeout(() => {
+      this.setState({
+        greeting : "Hello agian"
+      })
+    },5000)
   }
 
   render() {
     console.log("Did render")
     return (
       <div className="App">
+        {this.state.greeting}
         {/*map은 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환*/}
         {movies.map((movie, index) =>{
           return <Movie title = {movie.title} poster = {movie.poster} key={index} />
