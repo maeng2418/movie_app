@@ -18,42 +18,36 @@ class App extends Component {
 
   componentDidMount(){
     console.log("Did mount")
-    setTimeout(() => {
-      this.setState({
-        movies : [
-          {
-            title : "Matrix",
-             poster : "http://image.cine21.com/resize/cine21/poster/2016/0907/14_41_49__57cfa89dd00cd[X230,330].jpg"
-          },
-          {
-            title : "HungerGame",
-            poster : "http://tenasia.hankyung.com/webwp_kr/wp-content/uploads/2014/10/2014102322402016916.jpg"
-          },
-          {
-            title : "Oldboy",
-            poster : "https://upload.wikimedia.org/wikipedia/ko/thumb/4/48/Old_Boy.jpg/250px-Old_Boy.jpg"
-          },
-          {
-            title : "StarWars",
-            poster : "https://upload.wikimedia.org/wikipedia/ko/thumb/6/6a/%EC%8A%A4%ED%83%80%EC%9B%8C%EC%A6%88_%EA%B9%A8%EC%96%B4%EB%82%9C_%ED%8F%AC%EC%8A%A4.jpg/250px-%EC%8A%A4%ED%83%80%EC%9B%8C%EC%A6%88_%EA%B9%A8%EC%96%B4%EB%82%9C_%ED%8F%AC%EC%8A%A4.jpg"
-          },
-          {
-            title : "IronMan",
-            poster : "https://img1.daumcdn.net/thumb/C155x225/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fcfile%2F116F1B10AD71A328F2"
-          }
-        ]
-      })
-    },5000)
+    this._getMovies();
   }
+
+  //render -> "Loading"... -> componentDidMount -> getMovies -> 영화가 업데이트 <- callApi <- fetch
+  //영화 객체가 하나씩 받아보면서 동시에 업데이트됨.
 
   _renderMovies = () => {
     {/*map은 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환*/}
     const movies = this.state.movies.map((movie, index) => {
-      return <Movie title = {movie.title} poster = {movie.poster} key={index} />
+      return <Movie title = {movie.title} poster = {movie.large_cover_image} key={movie.id} />
       //movie요소들을 가지고 Movie 컴포넌트에 정보 보냄
     })
 
     return movies
+  }
+
+  //async로 무비 정보 가져옴과 동시에 업데이트. await으로는 무비정보를 가져온 다음에 업데이트 시켜야되니깐 순서를 내에서 정해줌?
+  _getMovies = async () => {
+    const movies = await this._callApi()
+    this.setState({
+      movies //최신자바스크립트 표현. 원래는 movies : movies
+    })
+  }
+
+  _callApi = () => {
+    return fetch("https://yts.am/api/v2/list_movies.json?sort_by=rating")
+    .then(response => response.json())
+    //.then(json => console.log(json))
+    .then(json => json.data.movies)
+    .catch(err=>console.log(err))
   }
 
   render() {
