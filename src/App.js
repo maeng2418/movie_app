@@ -26,8 +26,15 @@ class App extends Component {
 
   _renderMovies = () => {
     {/*map은 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환*/}
-    const movies = this.state.movies.map((movie, index) => {
-      return <Movie title = {movie.title} poster = {movie.large_cover_image} key={movie.id} />
+    const movies = this.state.movies.map((movie) => {
+      console.log(movie)
+      return <Movie
+        title = {movie.title_english}
+        poster = {movie.medium_cover_image}
+        key={movie.id}
+        genres={movie.genres}
+        synopsis={movie.synopsis}
+      />
       //movie요소들을 가지고 Movie 컴포넌트에 정보 보냄
     })
 
